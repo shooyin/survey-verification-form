@@ -36,6 +36,9 @@ class ValidationForm extends Component {
     this.setMapHeight();
   }
 
+  /*
+    Loads survey inputs into validation page
+  */
   async loadFormData() {
     await this.setState({
       firstName: this.props.form.firstName,
@@ -66,6 +69,9 @@ class ValidationForm extends Component {
     this.retrieveLocationCoordinates();
   }
 
+  /* 
+    Retrieves the geocodes from the full address.
+  */
   retrieveLocationCoordinates() {
     Geocode.fromAddress(this.state.fullAddress).then(
       (response) => {
@@ -81,6 +87,9 @@ class ValidationForm extends Component {
     );
   }
 
+  /*
+    Required Height parameter for Google Maps
+  */
   setMapHeight() {
     const titleHeight = document.getElementById("title-container").clientHeight;
     const mapHeight = window.innerHeight - titleHeight;
@@ -90,6 +99,9 @@ class ValidationForm extends Component {
     });
   }
 
+  /* 
+    Converts YYYY-MM-DD to Month DD YYYY
+  */
   dateToString(date) {
     var fullDate = new Date(date.replace("-", "/"));
     fullDate = fullDate.toDateString().slice(4, fullDate.toDateString().length);
@@ -122,6 +134,7 @@ class ValidationForm extends Component {
         </div>
         <div className="d-flex w-100">
           <div className="d-flex flex-column justify-content-between text-center">
+            {/* MARK: Left Panel: User Information */}
             <div>
               <span className="d-inline-block display-4 m-4">
                 <u>
@@ -154,6 +167,7 @@ class ValidationForm extends Component {
               </button>
             </div>
           </div>
+          {/* MARK: Right Panel: Google Maps */}
           <div
             id="map-container"
             className="d-flex flex-column text-center w-100"

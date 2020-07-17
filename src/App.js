@@ -12,6 +12,7 @@ class App extends Component {
     };
   }
 
+  /* perform this when a survey form is submitted */
   handleReceivedForm(e, form) {
     e.preventDefault();
     this.setState({
@@ -20,6 +21,7 @@ class App extends Component {
     });
   }
 
+  /* perform this when the user would like to "try again". */
   handleReset(e) {
     e.preventDefault();
     this.setState({

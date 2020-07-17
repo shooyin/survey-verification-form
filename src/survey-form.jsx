@@ -163,33 +163,6 @@ class SurveyForm extends Component {
                 </div>
               </div>
             </div>
-            {/* <fieldset className="form-group col-md-2">
-              <label>Height</label>
-              <div className="form-row">
-                <input
-                  type="number"
-                  className="form-control col-md-6"
-                  id="foot"
-                  placeholder="feet"
-                  value={this.state.foot}
-                  onChange={this.handleChangeFeet}
-                  min="0"
-                  max="9"
-                  maxLength="2"
-                />
-                <input
-                  type="number"
-                  className="form-control col-md-6"
-                  id="inch"
-                  placeholder="inches"
-                  value={this.state.inch}
-                  onChange={this.handleChangeInches}
-                  min="0"
-                  max="11"
-                  maxLength="2"
-                />
-              </div>
-            </fieldset> */}
 
             <div className="form-group col-md-6">
               <label htmlFor="educationLevel">Education Level</label>
@@ -468,6 +441,7 @@ class SurveyForm extends Component {
     );
   }
 
+  /* MARK: Input Change Handlers */
   handleChangeFirstName = (e) => {
     const { value, maxLength } = e.target;
     const message = value.slice(0, maxLength);
