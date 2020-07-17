@@ -74,7 +74,6 @@ class ValidationForm extends Component {
           lat,
           lng,
         });
-        console.log(lat, lng);
       },
       (error) => {
         console.error(error);
@@ -84,13 +83,8 @@ class ValidationForm extends Component {
 
   setMapHeight() {
     const titleHeight = document.getElementById("title-container").clientHeight;
-    const contentHeight = document.getElementById("content-container")
-      .clientHeight;
     const mapHeight = window.innerHeight - titleHeight;
-    console.log("window height", window.innerHeight);
-    console.log("title height", titleHeight);
-    console.log("content height", contentHeight);
-    console.log("map height", mapHeight);
+
     this.setState({
       mapHeight,
     });
@@ -127,7 +121,7 @@ class ValidationForm extends Component {
           <h2>Results Verification Page: John Le</h2>
         </div>
         <div className="d-flex w-100">
-          <div id="content-container" className="text-center">
+          <div className="d-flex flex-column justify-content-between text-center">
             <div>
               <span className="d-inline-block display-4 m-4">
                 <u>
@@ -150,6 +144,14 @@ class ValidationForm extends Component {
               </p>
               <b>Education Level:</b>
               <p>{education}</p>
+            </div>
+            <div>
+              <button
+                className="btn btn-primary mb-4"
+                onClick={this.props.resetForm}
+              >
+                Try Again
+              </button>
             </div>
           </div>
           <div

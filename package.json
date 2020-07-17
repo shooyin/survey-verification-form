@@ -1,6 +1,6 @@
 {
   "name": "input-form",
-  "homepage": "http://shooyin.github.io/survey-verification-form",
+  "homepage": "https://shooyin.github.io/survey-verification-form",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -19,9 +19,9 @@
     "react-bootstrap": "^1.2.1",
     "react-dom": "^16.13.1",
     "react-geocode": "^0.2.1",
-    "react-recaptcha": "^2.3.10",
-    "react-recaptcha-google": "^1.1.1",
+    "react-google-recaptcha": "^2.1.0",
     "react-scripts": "3.4.1",
+    "run": "^1.4.0",
     "typescript": "^3.9.7"
   },
   "scripts": {

@@ -1,6 +1,12 @@
 import React, { Component } from "react";
-import ReCaptchaGoogle from "./recaptcha";
-import Recaptcha from "react-recaptcha";
+import Geocode from "react-geocode";
+import ReCAPTCHA from "react-google-recaptcha";
+
+// set Google Maps Geocoding API for purposes of quota management. Optional, but recommended.
+Geocode.setApiKey("AIzaSyCQldl1eVtGg5Y6OgjJ8_sZITLWmY7WEH0");
+
+// set response Language. Defaults to English.
+Geocode.setLanguage("en");
 
 class SurveyForm extends Component {
   constructor(props) {
@@ -19,7 +25,10 @@ class SurveyForm extends Component {
       zip: "",
       email: "",
       emailConfirmation: "",
+      captchaValue: "",
+      captchaInvalidFlag: false,
       validDateOfBirth: true,
+      validAddress: true,
       validEmailConfirmation: true,
     };
   }
@@ -37,7 +46,38 @@ class SurveyForm extends Component {
     return maxDate;
   }
 
+  // Confirms if coordinates are available from the inputted addr
+  validateLocation() {
+    var fullAddress =
+      this.state.street +
+      " " +
+      this.state.street2 +
+      " " +
+      this.state.city +
+      " " +
+      this.state.state +
+      " " +
+      this.state.zip;
+
+    Geocode.fromAddress(fullAddress).then(
+      (response) => {
+        this.setState({
+          validAddress: true,
+        });
+      },
+      (error) => {
+        console.error(error);
+        this.setState({
+          validAddress: false,
+        });
+        return;
+      }
+    );
+  }
+
   render() {
+    const invalidField = "text-danger bold";
+
     return (
       <div className="d-flex flex-column">
         <div className="text-center p-1 bg-info">
@@ -80,7 +120,7 @@ class SurveyForm extends Component {
           </div>
 
           <div className="form-row">
-            <div className="form-group col-md-4">
+            <div className="form-group col-md-3">
               <label htmlFor="dateOfBirth">Date of Birth*</label>
               <input
                 type="date"
@@ -92,7 +132,38 @@ class SurveyForm extends Component {
                 required
               />
             </div>
-            <fieldset className="form-group col-md-2">
+            <div className="form-group col-md-3">
+              <label>Height</label>
+              <div className="row">
+                <div className="col-md-5">
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="foot"
+                    placeholder="feet"
+                    value={this.state.foot}
+                    onChange={this.handleChangeFeet}
+                    min="0"
+                    max="9"
+                    maxLength="2"
+                  />
+                </div>
+                <div className="col-md-5">
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="inch"
+                    placeholder="inches"
+                    value={this.state.inch}
+                    onChange={this.handleChangeInches}
+                    min="0"
+                    max="11"
+                    maxLength="2"
+                  />
+                </div>
+              </div>
+            </div>
+            {/* <fieldset className="form-group col-md-2">
               <label>Height</label>
               <div className="form-row">
                 <input
@@ -102,6 +173,8 @@ class SurveyForm extends Component {
                   placeholder="feet"
                   value={this.state.foot}
                   onChange={this.handleChangeFeet}
+                  min="0"
+                  max="9"
                   maxLength="2"
                 />
                 <input
@@ -111,10 +184,12 @@ class SurveyForm extends Component {
                   placeholder="inches"
                   value={this.state.inch}
                   onChange={this.handleChangeInches}
+                  min="0"
+                  max="11"
                   maxLength="2"
                 />
               </div>
-            </fieldset>
+            </fieldset> */}
 
             <div className="form-group col-md-6">
               <label htmlFor="educationLevel">Education Level</label>
@@ -136,7 +211,25 @@ class SurveyForm extends Component {
           <hr />
 
           <div className="form-group">
-            <label htmlFor="inputAddress">Address*</label>
+            {this.state.validAddress ? (
+              ""
+            ) : (
+              <div className="text-center">
+                <small className={invalidField}>
+                  <b>
+                    Invalid Address: Please double-check the spelling and try
+                    again.
+                  </b>
+                </small>
+                <br />
+              </div>
+            )}
+            <label
+              htmlFor="inputAddress"
+              className={this.state.validAddress ? "" : invalidField}
+            >
+              Address*
+            </label>
             <input
               type="text"
               className="form-control"
@@ -151,7 +244,12 @@ class SurveyForm extends Component {
 
           <div className="form-row">
             <div className="form-group col-md-2">
-              <label htmlFor="inputAddress2">Address 2</label>
+              <label
+                htmlFor="inputAddress2"
+                className={this.state.validAddress ? "" : invalidField}
+              >
+                Address 2
+              </label>
               <input
                 type="text"
                 className="form-control"
@@ -163,7 +261,12 @@ class SurveyForm extends Component {
               />
             </div>
             <div className="form-group col-md-7">
-              <label htmlFor="inputCity">City*</label>
+              <label
+                htmlFor="inputCity"
+                className={this.state.validAddress ? "" : invalidField}
+              >
+                City*
+              </label>
               <input
                 type="text"
                 className="form-control"
@@ -175,7 +278,12 @@ class SurveyForm extends Component {
               />
             </div>
             <div className="form-group col-md-1">
-              <label htmlFor="inputState">State*</label>
+              <label
+                htmlFor="inputState"
+                className={this.state.validAddress ? "" : invalidField}
+              >
+                State*
+              </label>
               <select
                 id="inputState"
                 className="form-control"
@@ -238,14 +346,20 @@ class SurveyForm extends Component {
               </select>
             </div>
             <div className="form-group col-md-2">
-              <label htmlFor="inputZip">Zip*</label>
+              <label
+                htmlFor="inputZip"
+                className={this.state.validAddress ? "" : invalidField}
+              >
+                Zip*
+              </label>
               <input
                 type="text"
                 className="form-control"
                 id="inputZip"
                 value={this.state.zip}
                 onChange={this.handleChangeZipCode}
-                maxLength="10"
+                minLength="5"
+                maxLength="5"
                 required
               />
             </div>
@@ -254,7 +368,25 @@ class SurveyForm extends Component {
           <hr />
 
           <div className="form-group">
-            <label htmlFor="email">Email*</label>
+            {this.state.validEmailConfirmation ? (
+              ""
+            ) : (
+              <div className="text-center">
+                <small className={invalidField}>
+                  <b>
+                    Invalid Email Confirmation: Please double-check the spelling
+                    and try again.
+                  </b>
+                </small>
+                <br />
+              </div>
+            )}
+            <label
+              htmlFor="email"
+              className={this.state.validEmailConfirmation ? "" : invalidField}
+            >
+              Email*
+            </label>
             <input
               type="email"
               className="form-control"
@@ -271,7 +403,12 @@ class SurveyForm extends Component {
             </small>
           </div>
           <div className="form-group pb-4">
-            <label htmlFor="emailConfirmation">Confirm Email*</label>
+            <label
+              htmlFor="emailConfirmation"
+              className={this.state.validEmailConfirmation ? "" : invalidField}
+            >
+              Confirm Email*
+            </label>
             <input
               type="email"
               className="form-control"
@@ -283,7 +420,7 @@ class SurveyForm extends Component {
               maxLength="40"
               required
             />
-            {!this.state.confirmEmail ? (
+            {this.state.validEmailConfirmation ? (
               ""
             ) : (
               <small
@@ -308,9 +445,21 @@ class SurveyForm extends Component {
                 </label>
               </div>
             </div>
-            {/* <ReCaptchaGoogle /> */}
-            {/* <Recaptcha sitekey="" render="explicit" hl={"ja"} /> */}
-            <button type="submit" className="btn btn-primary">
+            {!this.state.captchaInvalidFlag ? (
+              ""
+            ) : (
+              <div>
+                <small className={invalidField}>
+                  <b>Captcha Error: Try Again</b>
+                </small>
+                <br />
+              </div>
+            )}
+            <ReCAPTCHA
+              sitekey="6Ld0ZrIZAAAAAEbcZZPxtxtYXZoOxbsOpnKfbd1C"
+              onChange={this.handleChangeCaptcha}
+            />
+            <button type="submit" className="btn btn-primary my-4">
               Submit
             </button>
           </div>
@@ -434,37 +583,56 @@ class SurveyForm extends Component {
     });
   };
 
+  handleChangeCaptcha = (value) => {
+    console.log("captcha value", value);
+    this.setState({
+      captchaInvalidFlag: false,
+      captchaValue: value,
+    });
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
 
-    var {
-      email,
-      emailConfirmation,
-      dateOfBirth,
-      confirmEmail,
-      confirmDateOfBirth,
-    } = this.state;
+    var { email, emailConfirmation, captchaValue } = this.state;
 
     var form;
 
-    // TODO: Fix Confirm Email and Date of Birth
+    this.validateLocation();
 
-    //if (confirmEmail === true && confirmDateOfBirth === true)
-    form = {
-      firstName: this.state.firstName,
-      lastName: this.state.lastName,
-      dateOfBirth: this.state.dateOfBirth,
-      foot: this.state.foot,
-      inch: this.state.inch,
-      education: this.state.education,
-      street: this.state.street,
-      street2: this.state.street2,
-      city: this.state.street2,
-      state: this.state.state,
-      zip: this.state.zip,
-      email: this.state.email,
-    };
-    this.props.onSubmit(e, form);
+    // Confirm that emails match
+    if (email !== emailConfirmation) {
+      console.log("emails dont match");
+      this.setState({
+        validEmailConfirmation: false,
+      });
+      return;
+    }
+
+    if (captchaValue !== "") {
+      // Create valid form
+      form = {
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        dateOfBirth: this.state.dateOfBirth,
+        foot: this.state.foot,
+        inch: this.state.inch,
+        education: this.state.education,
+        street: this.state.street,
+        street2: this.state.street2,
+        city: this.state.street2,
+        state: this.state.state,
+        zip: this.state.zip,
+        email: this.state.email,
+      };
+
+      // Send form to Validation page
+      this.props.onSubmit(e, form);
+    } else {
+      this.setState({
+        captchaInvalidFlag: true,
+      });
+    }
   };
 }
 
