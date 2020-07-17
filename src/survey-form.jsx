@@ -33,6 +33,9 @@ class SurveyForm extends Component {
     };
   }
 
+  /*
+    Retrieves the current date in YYYY-MM-DD format
+  */
   todaysDate() {
     var today = new Date();
     var month = today.getMonth() + 1;
@@ -42,11 +45,14 @@ class SurveyForm extends Component {
     if (month < 10) month = "0" + month.toString();
     if (day < 10) day = "0" + day.toString();
 
-    var maxDate = year + "-" + month + "-" + day;
-    return maxDate;
+    var currentDay = year + "-" + month + "-" + day;
+    return currentDay;
   }
 
-  // Confirms if coordinates are available from the inputted addr
+  /* 
+  Tests whether the requested address has
+  a valid geocode from Google.
+  */
   validateLocation() {
     var fullAddress =
       this.state.street +
@@ -88,6 +94,7 @@ class SurveyForm extends Component {
           onSubmit={this.handleSubmit}
           className="p-4"
         >
+          {/* MARK: Name Input */}
           <p className="text-center display-4">Data Survey Form</p>
           <div className="form-group">
             <label>Name*</label>
@@ -119,6 +126,7 @@ class SurveyForm extends Component {
             </div>
           </div>
 
+          {/* MARK: Date of Birth Input */}
           <div className="form-row">
             <div className="form-group col-md-3">
               <label htmlFor="dateOfBirth">Date of Birth*</label>
@@ -132,6 +140,8 @@ class SurveyForm extends Component {
                 required
               />
             </div>
+
+            {/* MARK: Height Input */}
             <div className="form-group col-md-3">
               <label>Height</label>
               <div className="row">
@@ -164,6 +174,7 @@ class SurveyForm extends Component {
               </div>
             </div>
 
+            {/* MARK: Education Input */}
             <div className="form-group col-md-6">
               <label htmlFor="educationLevel">Education Level</label>
               <select
@@ -183,6 +194,7 @@ class SurveyForm extends Component {
 
           <hr />
 
+          {/* MARK: Address Section */}
           <div className="form-group">
             {this.state.validAddress ? (
               ""
@@ -197,6 +209,7 @@ class SurveyForm extends Component {
                 <br />
               </div>
             )}
+            {/* MARK: Street Input */}
             <label
               htmlFor="inputAddress"
               className={this.state.validAddress ? "" : invalidField}
@@ -216,6 +229,7 @@ class SurveyForm extends Component {
           </div>
 
           <div className="form-row">
+            {/* MARK: Street2 Input */}
             <div className="form-group col-md-2">
               <label
                 htmlFor="inputAddress2"
@@ -233,6 +247,8 @@ class SurveyForm extends Component {
                 maxLength="15"
               />
             </div>
+
+            {/* MARK: City Input */}
             <div className="form-group col-md-7">
               <label
                 htmlFor="inputCity"
@@ -250,6 +266,8 @@ class SurveyForm extends Component {
                 required
               />
             </div>
+
+            {/* MARK: State Input */}
             <div className="form-group col-md-1">
               <label
                 htmlFor="inputState"
@@ -318,6 +336,8 @@ class SurveyForm extends Component {
                 <option value="WY">WY</option>
               </select>
             </div>
+
+            {/* MARK: Zip Code Input */}
             <div className="form-group col-md-2">
               <label
                 htmlFor="inputZip"
@@ -340,6 +360,7 @@ class SurveyForm extends Component {
 
           <hr />
 
+          {/* MARK: Email Input */}
           <div className="form-group">
             {this.state.validEmailConfirmation ? (
               ""
@@ -375,6 +396,8 @@ class SurveyForm extends Component {
               We'll never share your email with anyone else.
             </small>
           </div>
+
+          {/* MARK: Confirm Email */}
           <div className="form-group pb-4">
             <label
               htmlFor="emailConfirmation"
@@ -405,6 +428,7 @@ class SurveyForm extends Component {
             )}
           </div>
           <div className="my-4">
+            {/* MARK: "Terms and Agreements" Checkbox */}
             <div className="form-group">
               <div className="form-check">
                 <input
@@ -418,6 +442,8 @@ class SurveyForm extends Component {
                 </label>
               </div>
             </div>
+
+            {/* MARK: ReCaptcha */}
             {!this.state.captchaInvalidFlag ? (
               ""
             ) : (
@@ -432,6 +458,8 @@ class SurveyForm extends Component {
               sitekey="6Ld0ZrIZAAAAAEbcZZPxtxtYXZoOxbsOpnKfbd1C"
               onChange={this.handleChangeCaptcha}
             />
+
+            {/* MARK: Submit Button */}
             <button type="submit" className="btn btn-primary my-4">
               Submit
             </button>
@@ -558,7 +586,6 @@ class SurveyForm extends Component {
   };
 
   handleChangeCaptcha = (value) => {
-    console.log("captcha value", value);
     this.setState({
       captchaInvalidFlag: false,
       captchaValue: value,
@@ -576,7 +603,6 @@ class SurveyForm extends Component {
 
     // Confirm that emails match
     if (email !== emailConfirmation) {
-      console.log("emails dont match");
       this.setState({
         validEmailConfirmation: false,
       });
