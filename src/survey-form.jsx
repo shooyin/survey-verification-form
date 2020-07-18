@@ -85,14 +85,14 @@ class SurveyForm extends Component {
     const invalidField = "text-danger bold";
 
     return (
-      <div className="d-flex flex-column">
+      <div className="d-flex flex-column w-100">
         <div className="text-center p-1 bg-info">
           <h4>CSC 642 Summer 2020 Individual Assignment: John Le</h4>
         </div>
         <form
           id="survey-form-container"
           onSubmit={this.handleSubmit}
-          className="p-4"
+          className="m-4"
         >
           {/* MARK: Name Input */}
           <p className="text-center display-4">Data Survey Form</p>
@@ -427,7 +427,7 @@ class SurveyForm extends Component {
               </small>
             )}
           </div>
-          <div className="my-4">
+          <div className="mt-4">
             {/* MARK: "Terms and Agreements" Checkbox */}
             <div className="form-group">
               <div className="form-check">
@@ -460,7 +460,7 @@ class SurveyForm extends Component {
             />
 
             {/* MARK: Submit Button */}
-            <button type="submit" className="btn btn-primary my-4">
+            <button type="submit" className="btn btn-primary mt-4">
               Submit
             </button>
           </div>
