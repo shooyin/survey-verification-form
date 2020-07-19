@@ -438,7 +438,8 @@ class SurveyForm extends Component {
                   required
                 />
                 <label className="form-check-label" htmlFor="agreeCheck">
-                  I agree with the <a href="_blank">Terms and Conditions</a>
+                  I agree with the{" "}
+                  <a href="javascript:void(0)">Terms and Conditions</a>
                 </label>
               </div>
             </div>
